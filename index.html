@@ -1,0 +1,1468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Michael Palazzo (KHVulcano) - Full Stack Software Engineer specializing in Java, C#, and Swift development. Interactive portfolio with volcanic themes.">
+    <meta name="keywords" content="Michael Palazzo, KHVulcano, Software Engineer, Java, C#, Swift, iOS Development, Full Stack Developer">
+    <meta name="author" content="Michael Palazzo">
+    <meta property="og:title" content="KHVulcano - Interactive Forge Portfolio">
+    <meta property="og:description" content="Full Stack Software Engineer crafting enterprise solutions with Java, C#, and Swift">
+    <meta property="og:image" content="https://example.com/portfolio-preview.jpg">
+    <meta property="og:url" content="https://khvulcano.dev">
+    <title>KHVulcano - Interactive Forge Portfolio</title>
+    
+    <!-- Preload critical resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-bg: #0d1117;
+            --secondary-bg: #161b22;
+            --tertiary-bg: #21262d;
+            --accent-color: #00d9ff;
+            --accent-secondary: #7c3aed;
+            --accent-tertiary: #ff6b6b;
+            --text-primary: #ffffff;
+            --text-secondary: #8b949e;
+            --border-color: rgba(48, 54, 61, 0.5);
+            --glass-bg: rgba(33, 38, 45, 0.8);
+            --glow-intensity: 0.3;
+            --animation-speed: 1;
+            --particle-count: 60;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+        }
+
+        /* Vulkano Theme - Production Ready */
+        :root.vulkano-theme {
+            --primary-bg: #0a0a0a;
+            --secondary-bg: #1a0f0a;
+            --tertiary-bg: #2a1a0f;
+            --accent-color: #ff4500;
+            --accent-secondary: #ffa500;
+            --accent-tertiary: #ffff00;
+            --text-primary: #ffffff;
+            --text-secondary: #cccccc;
+            --border-color: rgba(255, 69, 0, 0.6);
+            --glass-bg: rgba(42, 26, 15, 0.9);
+            --glow-intensity: 0.6;
+            --animation-speed: 1.2;
+            --particle-count: 80;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Performance Optimizations */
+        .gpu-accelerated {
+            will-change: transform, opacity;
+            transform: translateZ(0);
+            backface-visibility: hidden;
+        }
+
+        /* Loading Screen */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary-bg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loader-volcano {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: erupt 2s infinite ease-in-out;
+            filter: drop-shadow(0 0 20px currentColor);
+        }
+
+        @keyframes erupt {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(5deg); }
+        }
+
+        .loader-text {
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            animation: pulse 1.5s infinite;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .loader-progress {
+            width: 300px;
+            height: 4px;
+            background: rgba(255, 69, 0, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .loader-progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-color), var(--accent-secondary));
+            border-radius: 2px;
+            animation: loadProgress 3s ease-out forwards;
+        }
+
+        @keyframes loadProgress {
+            to { width: 100%; }
+        }
+
+        .loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Background Canvas */
+        #background-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background: linear-gradient(135deg, var(--primary-bg) 0%, var(--secondary-bg) 50%, var(--tertiary-bg) 100%);
+        }
+
+        /* Theme Switcher */
+        .theme-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 8px 32px var(--shadow-color);
+        }
+
+        .theme-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-color);
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .theme-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--accent-color);
+            border-radius: 50%;
+            transform: scale(0);
+            transition: transform 0.3s ease;
+            z-index: -1;
+        }
+
+        .theme-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px var(--accent-color);
+        }
+
+        .theme-btn:hover::before,
+        .theme-btn.active::before {
+            transform: scale(1);
+        }
+
+        .theme-btn.active {
+            color: var(--primary-bg);
+            background: var(--accent-color);
+        }
+
+        /* Navigation */
+        .floating-nav {
+            position: fixed;
+            top: 50%;
+            left: 30px;
+            transform: translateY(-50%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            padding: 20px 10px;
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 8px 32px var(--shadow-color);
+        }
+
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            border: 2px solid transparent;
+        }
+
+        .nav-dot:hover,
+        .nav-dot.active {
+            background: var(--accent-color);
+            transform: scale(1.4);
+            box-shadow: 0 0 15px var(--accent-color);
+        }
+
+        .nav-dot::after {
+            content: attr(data-section);
+            position: absolute;
+            left: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .nav-dot:hover::after {
+            opacity: 1;
+            transform: translateY(-50%) translateX(5px);
+        }
+
+        /* Layout */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 0;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            text-align: center;
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            border-radius: 30px;
+            margin: 20px;
+            border: 2px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 60px var(--shadow-color);
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                from 0deg,
+                transparent 0deg,
+                var(--accent-color) 90deg,
+                transparent 180deg,
+                var(--accent-secondary) 270deg,
+                transparent 360deg
+            );
+            animation: rotate 20s linear infinite;
+            opacity: 0.1;
+        }
+
+        @keyframes rotate {
+            to { transform: rotate(360deg); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding: 60px 40px;
+        }
+
+        .profile-avatar {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 4px solid var(--accent-color);
+            margin: 0 auto 30px;
+            background: linear-gradient(45deg, var(--accent-color), var(--accent-secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            animation: avatarGlow 3s infinite;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 40px rgba(255, 69, 0, 0.3);
+        }
+
+        @keyframes avatarGlow {
+            0%, 100% { box-shadow: 0 0 40px rgba(255, 69, 0, 0.3); }
+            50% { box-shadow: 0 0 60px rgba(255, 69, 0, 0.6); }
+        }
+
+        .profile-avatar::after {
+            content: '';
+            position: absolute;
+            inset: 8px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary-bg), var(--secondary-bg));
+            z-index: -1;
+        }
+
+        .typing-text {
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            background: linear-gradient(45deg, var(--accent-color), var(--accent-secondary), var(--accent-tertiary));
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 4s ease-in-out infinite;
+            margin-bottom: 20px;
+            font-weight: 700;
+            position: relative;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .typing-text::after {
+            content: '|';
+            position: absolute;
+            color: var(--accent-color);
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .status-badges {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .status-badge {
+            padding: 8px 16px;
+            background: rgba(255, 69, 0, 0.1);
+            border: 1px solid var(--accent-color);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--accent-color);
+            transition: all 0.3s ease;
+        }
+
+        .status-badge:hover {
+            background: var(--accent-color);
+            color: var(--primary-bg);
+            transform: translateY(-2px);
+        }
+
+        /* GitHub Stats */
+        .github-stats {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 40px 0;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 40px var(--shadow-color);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px var(--shadow-color);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Skills Section */
+        .skills-forge {
+            background: linear-gradient(135deg, var(--glass-bg), rgba(42, 26, 15, 0.6));
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px 0;
+            border: 2px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 50px var(--shadow-color);
+        }
+
+        .skills-forge::before {
+            content: '🌋';
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 2.5rem;
+            opacity: 0.2;
+            animation: forge-glow 3s infinite ease-in-out;
+        }
+
+        @keyframes forge-glow {
+            0%, 100% { opacity: 0.2; transform: rotate(0deg); }
+            50% { opacity: 0.6; transform: rotate(10deg); }
+        }
+
+        .skill-category {
+            margin: 30px 0;
+        }
+
+        .skill-category h4 {
+            color: var(--accent-color);
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 8px;
+        }
+
+        .skill-item {
+            margin: 15px 0;
+        }
+
+        .skill-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .skill-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .skill-level {
+            font-size: 0.9rem;
+            color: var(--accent-secondary);
+            font-weight: 500;
+        }
+
+        .skill-bar {
+            background: rgba(48, 54, 61, 0.6);
+            height: 6px;
+            border-radius: 3px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .skill-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-color), var(--accent-secondary));
+            border-radius: 3px;
+            transition: width 2s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            animation: skill-shimmer 3s infinite;
+        }
+
+        @keyframes skill-shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        /* Projects Section */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .project-card {
+            background: var(--glass-bg);
+            border-radius: 20px;
+            padding: 30px;
+            border: 2px solid var(--border-color);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 0 10px 40px var(--shadow-color);
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--accent-color), var(--accent-secondary));
+            border-radius: 20px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px var(--shadow-color);
+        }
+
+        .project-card:hover::before {
+            opacity: 1;
+        }
+
+        .project-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .project-title {
+            font-size: 1.3rem;
+            color: var(--accent-color);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .project-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .tech-badge {
+            padding: 4px 10px;
+            background: rgba(255, 69, 0, 0.1);
+            color: var(--accent-color);
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            border: 1px solid rgba(255, 69, 0, 0.3);
+        }
+
+        .project-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 15px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .status-indicator {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .status-active { background: #22c55e; }
+        .status-progress { background: #fbbf24; }
+        .status-planning { background: #3b82f6; }
+
+        /* Contact Section */
+        .terminal-contact {
+            background: #1a1a1a;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 15px 50px var(--shadow-color);
+        }
+
+        .terminal-header {
+            background: linear-gradient(90deg, #ff5f57, #ffbd2e, #28ca42);
+            height: 30px;
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            gap: 8px;
+        }
+
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .terminal-dot.red { background: #ff5f57; }
+        .terminal-dot.yellow { background: #ffbd2e; }
+        .terminal-dot.green { background: #28ca42; }
+
+        .terminal-content {
+            padding: 20px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .terminal-prompt {
+            color: var(--accent-color);
+            margin-right: 10px;
+        }
+
+        .terminal-command {
+            color: var(--accent-secondary);
+        }
+
+        .terminal-output {
+            color: var(--text-secondary);
+            margin-left: 20px;
+        }
+
+        /* Particle System */
+        .particle-system {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100px) translateX(var(--drift, 0));
+                opacity: 0;
+            }
+        }
+
+        .particle:nth-child(odd) {
+            background: var(--accent-secondary);
+            width: 1px;
+            height: 1px;
+        }
+
+        .particle:nth-child(3n) {
+            background: var(--accent-tertiary);
+            width: 1.5px;
+            height: 1.5px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .floating-nav {
+                bottom: 20px;
+                top: auto;
+                left: 50%;
+                transform: translateX(-50%);
+                flex-direction: row;
+                padding: 10px 20px;
+            }
+
+            .theme-switcher {
+                top: 10px;
+                right: 10px;
+                padding: 8px;
+                gap: 8px;
+            }
+
+            .theme-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1.1rem;
+            }
+
+            .hero-content {
+                padding: 40px 20px;
+            }
+
+            .profile-avatar {
+                width: 150px;
+                height: 150px;
+                font-size: 3rem;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .section {
+                padding: 40px 0;
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--primary-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-secondary);
+        }
+
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .loader,
+            .theme-switcher,
+            .floating-nav,
+            .particle-system {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="gpu-accelerated">
+    <!-- Loading Screen -->
+    <div class="loader" id="loader" aria-label="Loading portfolio">
+        <div class="loader-volcano" role="img" aria-label="Volcano emoji">🌋</div>
+        <div class="loader-text">Initializing Volcanic Forge...</div>
+        <div class="loader-progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+
+    <!-- Background Canvas -->
+    <canvas id="background-canvas" aria-hidden="true"></canvas>
+    
+    <!-- Theme Switcher -->
+    <div class="theme-switcher" role="toolbar" aria-label="Theme selection">
+        <button class="theme-btn" onclick="setTheme('cyber')" title="Cyber Theme" aria-label="Switch to Cyber theme">🔮</button>
+        <button class="theme-btn" onclick="setTheme('neon')" title="Neon Theme" aria-label="Switch to Neon theme">⚡</button>
+        <button class="theme-btn" onclick="setTheme('matrix')" title="Matrix Theme" aria-label="Switch to Matrix theme">💻</button>
+        <button class="theme-btn active" onclick="setTheme('vulkano')" title="Vulkano Forge" aria-label="Switch to Vulkano theme">🌋</button>
+    </div>
+
+    <!-- Floating Navigation -->
+    <nav class="floating-nav" role="navigation" aria-label="Section navigation">
+        <button class="nav-dot active" data-section="Hero" onclick="scrollToSection('hero')" aria-label="Go to Hero section"></button>
+        <button class="nav-dot" data-section="About" onclick="scrollToSection('about')" aria-label="Go to About section"></button>
+        <button class="nav-dot" data-section="Skills" onclick="scrollToSection('skills')" aria-label="Go to Skills section"></button>
+        <button class="nav-dot" data-section="Projects" onclick="scrollToSection('projects')" aria-label="Go to Projects section"></button>
+        <button class="nav-dot" data-section="Contact" onclick="scrollToSection('contact')" aria-label="Go to Contact section"></button>
+    </nav>
+    
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="section hero-section" id="hero" role="banner">
+            <div class="hero-content">
+                <div class="profile-avatar" role="img" aria-label="KHVulcano avatar">🌋</div>
+                <h1 class="typing-text" id="typing-text">Welcome to KHVulcano's Forge!</h1>
+                <p class="hero-subtitle">
+                    Full Stack Software Engineer crafting enterprise solutions with Java, C#, and Swift. 
+                    Transforming ideas into scalable, high-performance applications.
+                </p>
+                
+                <div class="status-badges">
+                    <span class="status-badge">🔥 Available for Projects</span>
+                    <span class="status-badge">⚒️ Enterprise Ready</span>
+                    <span class="status-badge">🚀 Innovation Focused</span>
+                </div>
+                
+                <!-- GitHub Stats -->
+                <div class="github-stats">
+                    <h3 style="text-align: center; margin-bottom: 20px; color: var(--accent-color);">🌋 Forge Analytics</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-number" data-target="150">0</div>
+                            <div class="stat-label">Commits</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" data-target="25">0</div>
+                            <div class="stat-label">Projects</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" data-target="12">0</div>
+                            <div class="stat-label">Languages</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" data-target="45">0</div>
+                            <div class="stat-label">Stars</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="section" id="about">
+            <div style="max-width: 800px; text-align: center;">
+                <h2 style="font-size: 2.5rem; margin-bottom: 30px; background: linear-gradient(45deg, var(--accent-color), var(--accent-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    🌋 The Volcanic Code Philosophy
+                </h2>
+                <p style="font-size: 1.1rem; line-height: 1.8; color: var(--text-secondary); margin-bottom: 30px;">
+                    Like volcanic glass forged under extreme pressure, great software emerges from the perfect combination of 
+                    heat, time, and precision. I specialize in building enterprise-grade applications that can withstand the 
+                    intense demands of production environments while maintaining crystal-clear code quality.
+                </p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 40px;">
+                    <div style="padding: 20px; background: var(--glass-bg); border-radius: 15px; border: 1px solid var(--border-color);">
+                        <h4 style="color: var(--accent-color); margin-bottom: 10px;">🔥 Heat-Tested Quality</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Code that withstands production pressure</p>
+                    </div>
+                    <div style="padding: 20px; background: var(--glass-bg); border-radius: 15px; border: 1px solid var(--border-color);">
+                        <h4 style="color: var(--accent-color); margin-bottom: 10px;">⚡ Explosive Performance</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Optimized for speed and scalability</p>
+                    </div>
+                    <div style="padding: 20px; background: var(--glass-bg); border-radius: 15px; border: 1px solid var(--border-color);">
+                        <h4 style="color: var(--accent-color); margin-bottom: 10px;">🏭 Enterprise Strength</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Built for real-world demands</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section class="section" id="skills">
+            <div style="width: 100%; max-width: 1000px;">
+                <h2 style="text-align: center; margin-bottom: 40px; font-size: 2.5rem; background: linear-gradient(45deg, var(--accent-color), var(--accent-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    ⚒️ Volcanic Tech Arsenal
+                </h2>
+                
+                <div class="skills-forge">
+                    <div class="skill-category">
+                        <h4>🔥 Core Languages</h4>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Java</span>
+                                <span class="skill-level">Expert - 95%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="95%" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">C#</span>
+                                <span class="skill-level">Advanced - 90%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="90%" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Swift</span>
+                                <span class="skill-level">Intermediate - 75%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="75%" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="skill-category">
+                        <h4>🌋 Frameworks & Technologies</h4>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Spring Boot</span>
+                                <span class="skill-level">Expert - 92%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="92%" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">.NET Core</span>
+                                <span class="skill-level">Advanced - 88%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="88%" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">SwiftUI</span>
+                                <span class="skill-level">Intermediate - 70%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="70%" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="skill-category">
+                        <h4>🏭 DevOps & Cloud</h4>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Docker & Kubernetes</span>
+                                <span class="skill-level">Advanced - 85%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="85%" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">AWS / Azure</span>
+                                <span class="skill-level">Advanced - 80%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="80%" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section class="section" id="projects">
+            <div style="width: 100%; max-width: 1200px;">
+                <h2 style="text-align: center; margin-bottom: 40px; font-size: 2.5rem; background: linear-gradient(45deg, var(--accent-color), var(--accent-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    🚧 Active Forge Projects
+                </h2>
+                
+                <div class="projects-grid">
+                    <article class="project-card">
+                        <div class="project-icon">🏭</div>
+                        <h3 class="project-title">Enterprise Magma Core</h3>
+                        <p class="project-description">
+                            High-performance enterprise management system built with microservices architecture, 
+                            featuring real-time data processing and advanced analytics capabilities.
+                        </p>
+                        <div class="project-tech">
+                            <span class="tech-badge">Java 21</span>
+                            <span class="tech-badge">Spring Boot</span>
+                            <span class="tech-badge">PostgreSQL</span>
+                            <span class="tech-badge">Redis</span>
+                            <span class="tech-badge">Docker</span>
+                        </div>
+                        <div class="project-status">
+                            <div class="status-indicator status-active"></div>
+                            <span>In Production</span>
+                        </div>
+                    </article>
+
+                    <article class="project-card">
+                        <div class="project-icon">📱</div>
+                        <h3 class="project-title">Swift Eruption Tracker</h3>
+                        <p class="project-description">
+                            iOS financial management application with real-time market data, ML-powered insights, 
+                            and beautiful SwiftUI interface for modern portfolio tracking.
+                        </p>
+                        <div class="project-tech">
+                            <span class="tech-badge">Swift 5.9</span>
+                            <span class="tech-badge">SwiftUI</span>
+                            <span class="tech-badge">CoreML</span>
+                            <span class="tech-badge">Combine</span>
+                            <span class="tech-badge">CloudKit</span>
+                        </div>
+                        <div class="project-status">
+                            <div class="status-indicator status-progress"></div>
+                            <span>Beta Testing</span>
+                        </div>
+                    </article>
+
+                    <article class="project-card">
+                        <div class="project-icon">⚒️</div>
+                        <h3 class="project-title">Vulcan Game Engine</h3>
+                        <p class="project-description">
+                            2D game development framework with advanced physics simulation, particle systems, 
+                            and cross-platform deployment capabilities for indie developers.
+                        </p>
+                        <div class="project-tech">
+                            <span class="tech-badge">C# 12</span>
+                            <span class="tech-badge">.NET 8</span>
+                            <span class="tech-badge">DirectX</span>
+                            <span class="tech-badge">Entity Framework</span>
+                        </div>
+                        <div class="project-status">
+                            <div class="status-indicator status-progress"></div>
+                            <span>Development</span>
+                        </div>
+                    </article>
+
+                    <article class="project-card">
+                        <div class="project-icon">🌐</div>
+                        <h3 class="project-title">Interactive Portfolio</h3>
+                        <p class="project-description">
+                            This very website! Built with cutting-edge web technologies, featuring dynamic themes, 
+                            particle systems, and responsive design optimized for performance.
+                        </p>
+                        <div class="project-tech">
+                            <span class="tech-badge">TypeScript</span>
+                            <span class="tech-badge">CSS3</span>
+                            <span class="tech-badge">Canvas API</span>
+                            <span class="tech-badge">PWA</span>
+                        </div>
+                        <div class="project-status">
+                            <div class="status-indicator status-active"></div>
+                            <span>Live</span>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="section" id="contact">
+            <div style="width: 100%; max-width: 800px; text-align: center;">
+                <h2 style="margin-bottom: 40px; font-size: 2.5rem; background: linear-gradient(45deg, var(--accent-color), var(--accent-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    📡 Contact Interface
+                </h2>
+                
+                <div class="terminal-contact">
+                    <div class="terminal-header">
+                        <div class="terminal-dot red"></div>
+                        <div class="terminal-dot yellow"></div>
+                        <div class="terminal-dot green"></div>
+                        <span style="margin-left: 10px; color: var(--text-secondary); font-size: 0.8rem;">terminal@khvulcano.dev</span>
+                    </div>
+                    
+                    <div class="terminal-content">
+                        <div><span class="terminal-prompt">$</span><span class="terminal-command"> whoami</span></div>
+                        <div class="terminal-output">Michael Palazzo - Full Stack Software Engineer</div>
+                        <br>
+                        <div><span class="terminal-prompt">$</span><span class="terminal-command"> cat contact_info.json</span></div>
+                        <div class="terminal-output">{</div>
+                        <div class="terminal-output">  "email": "<a href="mailto:palazzo.michael.r@gmail.com" style="color: var(--accent-color); text-decoration: none;">palazzo.michael.r@gmail.com</a>",</div>
+                        <div class="terminal-output">  "linkedin": "<a href="https://linkedin.com/in/michael-palazzo" target="_blank" style="color: var(--accent-color); text-decoration: none;">linkedin.com/in/michael-palazzo</a>",</div>
+                        <div class="terminal-output">  "github": "<a href="https://github.com/KHVulcano" target="_blank" style="color: var(--accent-color); text-decoration: none;">github.com/KHVulcano</a>",</div>
+                        <div class="terminal-output">  "status": "available_for_hire",</div>
+                        <div class="terminal-output">  "timezone": "EST",</div>
+                        <div class="terminal-output">  "specialties": ["enterprise_java", "mobile_ios", "cloud_architecture"]</div>
+                        <div class="terminal-output">}</div>
+                        <br>
+                        <div><span class="terminal-prompt">$</span><span class="terminal-command"> echo "Let's build something amazing together!"</span></div>
+                        <div class="terminal-output">Let's build something amazing together! 🚀</div>
+                        <div><span class="terminal-prompt">$</span><span style="animation: blink 1s infinite;">_</span></div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 40px; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                    <a href="mailto:palazzo.michael.r@gmail.com" class="status-badge" style="text-decoration: none;">
+                        📧 Send Email
+                    </a>
+                    <a href="https://linkedin.com/in/michael-palazzo" target="_blank" class="status-badge" style="text-decoration: none;">
+                        💼 LinkedIn
+                    </a>
+                    <a href="https://github.com/KHVulcano" target="_blank" class="status-badge" style="text-decoration: none;">
+                        🔗 GitHub
+                    </a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Particle System -->
+    <div class="particle-system" id="particle-system" aria-hidden="true"></div>
+
+    <script>
+        // Performance tracking
+        const performanceMetrics = {
+            loadStart: performance.now(),
+            scriptsLoaded: false,
+            assetsLoaded: false
+        };
+
+        // Theme system
+        const themes = {
+            cyber: {
+                primary: [0.05, 0.08, 0.12],
+                accent: [0.0, 0.85, 1.0],
+                secondary: [0.31, 0.23, 0.93],
+                tertiary: [1.0, 0.42, 0.42],
+                name: 'Cyber'
+            },
+            neon: {
+                primary: [0.1, 0.0, 0.2],
+                accent: [1.0, 0.0, 1.0],
+                secondary: [0.0, 1.0, 0.5],
+                tertiary: [1.0, 1.0, 0.0],
+                name: 'Neon'
+            },
+            matrix: {
+                primary: [0.0, 0.05, 0.0],
+                accent: [0.0, 1.0, 0.0],
+                secondary: [0.0, 0.8, 0.2],
+                tertiary: [0.2, 1.0, 0.2],
+                name: 'Matrix'
+            },
+            vulkano: {
+                primary: [0.04, 0.04, 0.04],
+                accent: [1.0, 0.27, 0.0],
+                secondary: [1.0, 0.65, 0.0],
+                tertiary: [1.0, 1.0, 0.0],
+                name: 'Vulkano'
+            }
+        };
+
+        let currentTheme = 'vulkano';
+
+        function setTheme(themeName) {
+            try {
+                currentTheme = themeName;
+                
+                // Update active button
+                document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
+                event.target.classList.add('active');
+                
+                const theme = themes[themeName];
+                const root = document.documentElement;
+                
+                // Apply theme colors
+                root.style.setProperty('--accent-color', 
+                    `rgb(${theme.accent[0] * 255}, ${theme.accent[1] * 255}, ${theme.accent[2] * 255})`);
+                root.style.setProperty('--accent-secondary', 
+                    `rgb(${theme.secondary[0] * 255}, ${theme.secondary[1] * 255}, ${theme.secondary[2] * 255})`);
+                root.style.setProperty('--accent-tertiary', 
+                    `rgb(${theme.tertiary[0] * 255}, ${theme.tertiary[1] * 255}, ${theme.tertiary[2] * 255})`);
+                
+                // Special handling for Vulkano theme
+                if (themeName === 'vulkano') {
+                    root.classList.add('vulkano-theme');
+                } else {
+                    root.classList.remove('vulkano-theme');
+                }
+                
+                updateParticleColors(theme);
+                
+                // Store preference
+                localStorage.setItem('preferred-theme', themeName);
+            } catch (error) {
+                console.error('Error setting theme:', error);
+            }
+        }
+
+        // Typing animation
+        const typingTexts = [
+            "Welcome to KHVulcano's Forge! 🌋",
+            "Volcanic Code Architect ⚒️",
+            "Java Enterprise Master 🔥",
+            "C# .NET Specialist 💻",
+            "Swift iOS Innovator 📱",
+            "Full Stack Forge Master 🚀"
+        ];
+
+        let textIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        let typingSpeed = 100;
+
+        function typeText() {
+            const typingElement = document.getElementById('typing-text');
+            if (!typingElement) return;
+
+            const currentText = typingTexts[textIndex];
+            
+            if (isDeleting) {
+                typingElement.textContent = currentText.substring(0, charIndex - 1);
+                charIndex--;
+                typingSpeed = 50;
+            } else {
+                typingElement.textContent = currentText.substring(0, charIndex + 1);
+                charIndex++;
+                typingSpeed = 100;
+            }
+
+            if (!isDeleting && charIndex === currentText.length) {
+                typingSpeed = 2000;
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                textIndex = (textIndex + 1) % typingTexts.length;
+                typingSpeed = 500;
+            }
+
+            setTimeout(typeText, typingSpeed);
+        }
+
+        // Particle system
+        function createParticleSystem() {
+            const particleSystem = document.getElementById('particle-system');
+            if (!particleSystem) return;
+
+            particleSystem.innerHTML = '';
+            const particleCount = window.innerWidth < 768 ? 30 : 60;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
+                particle.style.setProperty('--drift', (Math.random() - 0.5) * 100 + 'px');
+                particleSystem.appendChild(particle);
+            }
+        }
+
+        function updateParticleColors(theme) {
+            const particles = document.querySelectorAll('.particle');
+            particles.forEach((particle, index) => {
+                const type = index % 3;
+                if (type === 0) {
+                    particle.style.background = `rgb(${theme.accent[0] * 255}, ${theme.accent[1] * 255}, ${theme.accent[2] * 255})`;
+                } else if (type === 1) {
+                    particle.style.background = `rgb(${theme.secondary[0] * 255}, ${theme.secondary[1] * 255}, ${theme.secondary[2] * 255})`;
+                } else {
+                    particle.style.background = `rgb(${theme.tertiary[0] * 255}, ${theme.tertiary[1] * 255}, ${theme.tertiary[2] * 255})`;
+                }
+            });
+        }
+
+        // Navigation
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                
+                // Update active navigation dot
+                document.querySelectorAll('.nav-dot').forEach(dot => dot.classList.remove('active'));
+                event.target.classList.add('active');
+            }
+        }
+
+        // Stats animation
+        function animateStats() {
+            const statNumbers = document.querySelectorAll('.stat-number');
+            statNumbers.forEach(stat => {
+                const target = parseInt(stat.getAttribute('data-target'));
+                const increment = target / 50;
+                let current = 0;
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(timer);
+                    }
+                    stat.textContent = Math.floor(current);
+                }, 40);
+            });
+        }
+
+        // Skill bars animation
+        function animateSkillBars() {
+            const skillBars = document.querySelectorAll('.skill-progress');
+            skillBars.forEach(bar => {
+                const width = bar.getAttribute('data-width');
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, Math.random() * 1000);
+            });
+        }
+
+        // Intersection Observer for navigation
+        function setupIntersectionObserver() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const sectionId = entry.target.id;
+                        document.querySelectorAll('.nav-dot').forEach(dot => dot.classList.remove('active'));
+                        
+                        const navDots = document.querySelectorAll('.nav-dot');
+                        const sections = ['hero', 'about', 'skills', 'projects', 'contact'];
+                        const index = sections.indexOf(sectionId);
+                        if (index !== -1 && navDots[index]) {
+                            navDots[index].classList.add('active');
+                        }
+                    }
+                });
+            }, { threshold: 0.3 });
+
+            document.querySelectorAll('.section').forEach(section => {
+                observer.observe(section);
+            });
+        }
+
+        // Error handling
+        window.addEventListener('error', (e) => {
+            console.error('Portfolio error:', e.error);
+            // Fallback behavior
+            document.body.style.background = '#0d1117';
+        });
+
+        // Initialize everything
+        function initializePortfolio() {
+            try {
+                // Set initial theme
+                const savedTheme = localStorage.getItem('preferred-theme') || 'vulkano';
+                document.documentElement.classList.add(`${savedTheme}-theme`);
+                
+                // Start animations
+                createParticleSystem();
+                typeText();
+                setupIntersectionObserver();
+                
+                // Hide loader
+                setTimeout(() => {
+                    const loader = document.getElementById('loader');
+                    if (loader) {
+                        loader.classList.add('hidden');
+                        // Start stat animations after loader is hidden
+                        setTimeout(animateStats, 500);
+                        setTimeout(animateSkillBars, 1000);
+                    }
+                }, 2000);
+                
+                performanceMetrics.scriptsLoaded = true;
+                console.log('Portfolio initialized successfully');
+            } catch (error) {
+                console.error('Initialization error:', error);
+            }
+        }
+
+        // DOM ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializePortfolio);
+        } else {
+            initializePortfolio();
+        }
+
+        // Performance monitoring
+        window.addEventListener('load', () => {
+            performanceMetrics.assetsLoaded = true;
+            const loadTime = performance.now() - performanceMetrics.loadStart;
+            console.log(`Portfolio loaded in ${loadTime.toFixed(2)}ms`);
+        });
+
+        // Resize handler
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                createParticleSystem();
+            }, 250);
+        });
+    </script>
+</body>
+</html>
