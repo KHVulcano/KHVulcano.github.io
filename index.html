@@ -1424,6 +1424,9 @@
     <div class="particle-system" id="particle-system" aria-hidden="true"></div>
 
     <script>
+        let commandHistory = [];
+        let historyIndex = -1;
+
         // Performance tracking
         const performanceMetrics = {
             loadStart: performance.now(),
@@ -1716,13 +1719,13 @@
             const terminalContent = document.querySelector('.terminal-content');
             const terminalInput = document.getElementById('terminal-input');
 
-                const fullscreenBtn = document.querySelector('.terminal-dot.green');
-    const terminal = document.querySelector('.terminal-contact');
-    if (fullscreenBtn && terminal) {
-        fullscreenBtn.addEventListener('click', () => {
-            terminal.classList.toggle('fullscreen');
-        });
-    }
+            const fullscreenBtn = document.querySelector('.terminal-dot.green');
+            const terminal = document.querySelector('.terminal-contact');
+            if (fullscreenBtn && terminal) {
+                fullscreenBtn.addEventListener('click', () => {
+                    terminal.classList.toggle('fullscreen');
+                });
+            }
 
             if (terminalInput) {
                 terminalInput.focus();
@@ -1731,6 +1734,9 @@
                     if (e.key === 'Enter') {
                         const command = terminalInput.value.trim();
                         if (command.length > 0) {
+                            // Add to history
+                            commandHistory.push(command);
+                            historyIndex = commandHistory.length;
                             // Echo the command
                             const cmdDiv = document.createElement('div');
                             cmdDiv.innerHTML = `<span class="terminal-prompt">$</span><span class="terminal-command"> ${command}</span>`;
@@ -1807,8 +1813,34 @@
                             // Scroll to bottom
                             terminalContent.scrollTop = terminalContent.scrollHeight;
                         }
+                        let tempInput = '';
                         terminalInput.value = '';
-                    }
+                    } else if (e.key === 'ArrowUp') {
+        if (commandHistory.length) {
+            if (historyIndex === commandHistory.length) {
+                // Save current input before navigating history
+                tempInput = terminalInput.value;
+            }
+            if (historyIndex > 0) {
+                historyIndex--;
+                terminalInput.value = commandHistory[historyIndex];
+                setTimeout(() => terminalInput.setSelectionRange(terminalInput.value.length, terminalInput.value.length), 0);
+            }
+        }
+        e.preventDefault();
+    } else if (e.key === 'ArrowDown') {
+        if (commandHistory.length) {
+            if (historyIndex < commandHistory.length - 1) {
+                historyIndex++;
+                terminalInput.value = commandHistory[historyIndex];
+            } else if (historyIndex === commandHistory.length - 1) {
+                // Restore the temp input when returning to the latest position
+                historyIndex++;
+                terminalInput.value = tempInput;
+            }
+        }
+        e.preventDefault();
+    }
                 });
             }
         });
