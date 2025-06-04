@@ -1,22 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Michael Palazzo (KHVulcano) - Full Stack Software Engineer specializing in Java, C#, and Swift development. Interactive portfolio with volcanic themes.">
-    <meta name="keywords" content="Michael Palazzo, KHVulcano, Software Engineer, Java, C#, Swift, iOS Development, Full Stack Developer">
+    <meta name="description"
+        content="Michael Palazzo (KHVulcano) - Full Stack Software Engineer specializing in Java, C#, and Swift development. Interactive portfolio with volcanic themes.">
+    <meta name="keywords"
+        content="Michael Palazzo, KHVulcano, Software Engineer, Java, C#, Swift, iOS Development, Full Stack Developer">
     <meta name="author" content="Michael Palazzo">
     <meta property="og:title" content="KHVulcano - Interactive Forge Portfolio">
-    <meta property="og:description" content="Full Stack Software Engineer crafting enterprise solutions with Java, C#, and Swift">
+    <meta property="og:description"
+        content="Full Stack Software Engineer crafting enterprise solutions with Java, C#, and Swift">
     <meta property="og:image" content="https://example.com/portfolio-preview.jpg">
     <meta property="og:url" content="https://khvulcano.dev">
     <title>KHVulcano - Interactive Forge Portfolio</title>
-    
+
     <!-- Preload critical resources -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=Fira+Code:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
     <style>
         :root {
             --primary-bg: #0d1117;
@@ -100,8 +106,15 @@
         }
 
         @keyframes erupt {
-            0%, 100% { transform: scale(1) rotate(0deg); }
-            50% { transform: scale(1.1) rotate(5deg); }
+
+            0%,
+            100% {
+                transform: scale(1) rotate(0deg);
+            }
+
+            50% {
+                transform: scale(1.1) rotate(5deg);
+            }
         }
 
         .loader-text {
@@ -134,7 +147,9 @@
         }
 
         @keyframes loadProgress {
-            to { width: 100%; }
+            to {
+                width: 100%;
+            }
         }
 
         .loader.hidden {
@@ -307,20 +322,20 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: conic-gradient(
-                from 0deg,
-                transparent 0deg,
-                var(--accent-color) 90deg,
-                transparent 180deg,
-                var(--accent-secondary) 270deg,
-                transparent 360deg
-            );
+            background: conic-gradient(from 0deg,
+                    transparent 0deg,
+                    var(--accent-color) 90deg,
+                    transparent 180deg,
+                    var(--accent-secondary) 270deg,
+                    transparent 360deg);
             animation: rotate 20s linear infinite;
             opacity: 0.1;
         }
 
         @keyframes rotate {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         .hero-content {
@@ -347,8 +362,15 @@
         }
 
         @keyframes avatarGlow {
-            0%, 100% { box-shadow: 0 0 40px rgba(255, 69, 0, 0.3); }
-            50% { box-shadow: 0 0 60px rgba(255, 69, 0, 0.6); }
+
+            0%,
+            100% {
+                box-shadow: 0 0 40px rgba(255, 69, 0, 0.3);
+            }
+
+            50% {
+                box-shadow: 0 0 60px rgba(255, 69, 0, 0.6);
+            }
         }
 
         .profile-avatar::after {
@@ -371,11 +393,19 @@
             margin-bottom: 20px;
             font-weight: 700;
             position: relative;
+            min-height: 6.5rem;
         }
 
         @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
         }
 
         .typing-text::after {
@@ -386,8 +416,16 @@
         }
 
         @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0; }
+
+            0%,
+            50% {
+                opacity: 1;
+            }
+
+            51%,
+            100% {
+                opacity: 0;
+            }
         }
 
         .hero-subtitle {
@@ -432,6 +470,7 @@
             margin: 40px 0;
             border: 1px solid var(--border-color);
             box-shadow: 0 10px 40px var(--shadow-color);
+            min-width: 50rem;
         }
 
         .stats-grid {
@@ -492,8 +531,17 @@
         }
 
         @keyframes forge-glow {
-            0%, 100% { opacity: 0.2; transform: rotate(0deg); }
-            50% { opacity: 0.6; transform: rotate(10deg); }
+
+            0%,
+            100% {
+                opacity: 0.2;
+                transform: rotate(0deg);
+            }
+
+            50% {
+                opacity: 0.6;
+                transform: rotate(10deg);
+            }
         }
 
         .skill-category {
@@ -559,8 +607,13 @@
         }
 
         @keyframes skill-shimmer {
-            0% { left: -100%; }
-            100% { left: 100%; }
+            0% {
+                left: -100%;
+            }
+
+            100% {
+                left: 100%;
+            }
         }
 
         /* Projects Section */
@@ -658,9 +711,17 @@
             animation: pulse 2s infinite;
         }
 
-        .status-active { background: #22c55e; }
-        .status-progress { background: #fbbf24; }
-        .status-planning { background: #3b82f6; }
+        .status-active {
+            background: #22c55e;
+        }
+
+        .status-progress {
+            background: #fbbf24;
+        }
+
+        .status-planning {
+            background: #3b82f6;
+        }
 
         /* Contact Section */
         .terminal-contact {
@@ -688,9 +749,70 @@
             border-radius: 50%;
         }
 
-        .terminal-dot.red { background: #ff5f57; }
-        .terminal-dot.yellow { background: #ffbd2e; }
-        .terminal-dot.green { background: #28ca42; }
+        .terminal-dot.red {
+            background: #ff5f57;
+        }
+
+        .terminal-dot.yellow {
+            background: #ffbd2e;
+        }
+
+        .terminal-dot.green {
+            background: #28ca42;
+        }
+
+        .terminal-dot.red:active {
+            background: #ff7f78;
+        }
+
+        .terminal-dot.yellow:active {
+            background: #ffc851;
+        }
+
+        .terminal-dot.green:active {
+            background: #42d05a;
+        }
+
+        .terminal-header:hover .terminal-dot.red::after,
+        .terminal-dot.red:hover::after {
+            content: "✖";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            color: #8080809c;
+            font-size: 0.7rem;
+            pointer-events: none;
+        }
+
+        .terminal-header:hover .terminal-dot.yellow::after,
+        .terminal-dot.yellow:hover::after {
+            content: "–";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            color: #8080809c;
+            font-size: 0.7rem;
+            pointer-events: none;
+        }
+
+        .terminal-header:hover .terminal-dot.green::after,
+        .terminal-dot.green:hover::after {
+            content: "⤡";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            color: #8080809c;
+            font-size: 0.7rem;
+            pointer-events: none;
+        }
+
+        .terminal-dot {
+            position: relative;
+            /* Needed for ::after positioning */
+        }
 
         .terminal-content {
             padding: 20px;
@@ -712,6 +834,42 @@
             color: var(--text-secondary);
             margin-left: 20px;
         }
+
+        /* ...existing code... */
+        .terminal-input-row {
+            display: flex;
+            align-items: center;
+        }
+
+        .terminal-input {
+            background: transparent;
+            border: none;
+            color: var(--accent-secondary);
+            font-family: 'Fira Code', monospace;
+            font-size: 1em;
+            outline: none;
+            width: 80%;
+            caret-color: var(--accent-color);
+            margin-left: 2px;
+            /* animation: blink 1s infinite steps(1, start); */
+        }
+
+        .terminal-input::-webkit-input-placeholder {
+            color: var(--text-secondary);
+            opacity: 0.7;
+        }
+
+        .terminal-input:-ms-input-placeholder {
+            color: var(--text-secondary);
+            opacity: 0.7;
+        }
+
+        .terminal-input::placeholder {
+            color: var(--text-secondary);
+            opacity: 0.7;
+        }
+
+        /* ...existing code... */
 
         /* Particle System */
         .particle-system {
@@ -739,12 +897,15 @@
                 transform: translateY(100vh) translateX(0);
                 opacity: 0;
             }
+
             10% {
                 opacity: 0.6;
             }
+
             90% {
                 opacity: 0.6;
             }
+
             100% {
                 transform: translateY(-100px) translateX(var(--drift, 0));
                 opacity: 0;
@@ -831,6 +992,7 @@
 
         /* Accessibility */
         @media (prefers-reduced-motion: reduce) {
+
             *,
             *::before,
             *::after {
@@ -842,6 +1004,7 @@
 
         /* Print styles */
         @media print {
+
             .loader,
             .theme-switcher,
             .floating-nav,
@@ -851,6 +1014,7 @@
         }
     </style>
 </head>
+
 <body class="gpu-accelerated">
     <!-- Loading Screen -->
     <div class="loader" id="loader" aria-label="Loading portfolio">
@@ -861,24 +1025,33 @@
 
     <!-- Background Canvas -->
     <canvas id="background-canvas" aria-hidden="true"></canvas>
-    
+
     <!-- Theme Switcher -->
     <div class="theme-switcher" role="toolbar" aria-label="Theme selection">
-        <button class="theme-btn" onclick="setTheme('cyber')" title="Cyber Theme" aria-label="Switch to Cyber theme">🔮</button>
-        <button class="theme-btn" onclick="setTheme('neon')" title="Neon Theme" aria-label="Switch to Neon theme">⚡</button>
-        <button class="theme-btn" onclick="setTheme('matrix')" title="Matrix Theme" aria-label="Switch to Matrix theme">💻</button>
-        <button class="theme-btn active" onclick="setTheme('vulkano')" title="Vulkano Forge" aria-label="Switch to Vulkano theme">🌋</button>
+        <button class="theme-btn" onclick="setTheme('cyber')" title="Cyber Theme"
+            aria-label="Switch to Cyber theme">🔮</button>
+        <button class="theme-btn" onclick="setTheme('neon')" title="Neon Theme"
+            aria-label="Switch to Neon theme">⚡</button>
+        <button class="theme-btn" onclick="setTheme('matrix')" title="Matrix Theme"
+            aria-label="Switch to Matrix theme">💻</button>
+        <button class="theme-btn active" onclick="setTheme('vulkano')" title="Vulkano Forge"
+            aria-label="Switch to Vulkano theme">🌋</button>
     </div>
 
     <!-- Floating Navigation -->
     <nav class="floating-nav" role="navigation" aria-label="Section navigation">
-        <button class="nav-dot active" data-section="Hero" onclick="scrollToSection('hero')" aria-label="Go to Hero section"></button>
-        <button class="nav-dot" data-section="About" onclick="scrollToSection('about')" aria-label="Go to About section"></button>
-        <button class="nav-dot" data-section="Skills" onclick="scrollToSection('skills')" aria-label="Go to Skills section"></button>
-        <button class="nav-dot" data-section="Projects" onclick="scrollToSection('projects')" aria-label="Go to Projects section"></button>
-        <button class="nav-dot" data-section="Contact" onclick="scrollToSection('contact')" aria-label="Go to Contact section"></button>
+        <button class="nav-dot active" data-section="Hero" onclick="scrollToSection('hero')"
+            aria-label="Go to Hero section"></button>
+        <button class="nav-dot" data-section="About" onclick="scrollToSection('about')"
+            aria-label="Go to About section"></button>
+        <button class="nav-dot" data-section="Skills" onclick="scrollToSection('skills')"
+            aria-label="Go to Skills section"></button>
+        <button class="nav-dot" data-section="Projects" onclick="scrollToSection('projects')"
+            aria-label="Go to Projects section"></button>
+        <button class="nav-dot" data-section="Contact" onclick="scrollToSection('contact')"
+            aria-label="Go to Contact section"></button>
     </nav>
-    
+
     <div class="container">
         <!-- Hero Section -->
         <section class="section hero-section" id="hero" role="banner">
@@ -886,19 +1059,20 @@
                 <div class="profile-avatar" role="img" aria-label="KHVulcano avatar">🌋</div>
                 <h1 class="typing-text" id="typing-text">Welcome to KHVulcano's Forge!</h1>
                 <p class="hero-subtitle">
-                    Full Stack Software Engineer crafting enterprise solutions with Java, C#, and Swift. 
+                    Full Stack Software Engineer crafting enterprise solutions with Java, C#, and Swift.
                     Transforming ideas into scalable, high-performance applications.
                 </p>
-                
+
                 <div class="status-badges">
                     <span class="status-badge">🔥 Available for Projects</span>
                     <span class="status-badge">⚒️ Enterprise Ready</span>
                     <span class="status-badge">🚀 Innovation Focused</span>
                 </div>
-                
+
                 <!-- GitHub Stats -->
                 <div class="github-stats">
-                    <h3 style="text-align: center; margin-bottom: 20px; color: var(--accent-color);">🌋 Forge Analytics</h3>
+                    <h3 style="text-align: center; margin-bottom: 20px; color: var(--accent-color);">🌋 Forge Analytics
+                    </h3>
                     <div class="stats-grid">
                         <div class="stat-item">
                             <div class="stat-number" data-target="150">0</div>
@@ -924,24 +1098,33 @@
         <!-- About Section -->
         <section class="section" id="about">
             <div style="max-width: 800px; text-align: center;">
-                <h2 style="font-size: 2.5rem; margin-bottom: 30px; background: linear-gradient(45deg, var(--accent-color), var(--accent-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                <h2
+                    style="font-size: 2.5rem; margin-bottom: 30px; background: linear-gradient(45deg, var(--accent-color), var(--accent-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
                     🌋 The Volcanic Code Philosophy
                 </h2>
                 <p style="font-size: 1.1rem; line-height: 1.8; color: var(--text-secondary); margin-bottom: 30px;">
-                    Like volcanic glass forged under extreme pressure, great software emerges from the perfect combination of 
-                    heat, time, and precision. I specialize in building enterprise-grade applications that can withstand the 
+                    Like volcanic glass forged under extreme pressure, great software emerges from the perfect
+                    combination of
+                    heat, time, and precision. I specialize in building enterprise-grade applications that can withstand
+                    the
                     intense demands of production environments while maintaining crystal-clear code quality.
                 </p>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 40px;">
-                    <div style="padding: 20px; background: var(--glass-bg); border-radius: 15px; border: 1px solid var(--border-color);">
+                <div
+                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 40px;">
+                    <div
+                        style="padding: 20px; background: var(--glass-bg); border-radius: 15px; border: 1px solid var(--border-color);">
                         <h4 style="color: var(--accent-color); margin-bottom: 10px;">🔥 Heat-Tested Quality</h4>
-                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Code that withstands production pressure</p>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Code that withstands production
+                            pressure</p>
                     </div>
-                    <div style="padding: 20px; background: var(--glass-bg); border-radius: 15px; border: 1px solid var(--border-color);">
+                    <div
+                        style="padding: 20px; background: var(--glass-bg); border-radius: 15px; border: 1px solid var(--border-color);">
                         <h4 style="color: var(--accent-color); margin-bottom: 10px;">⚡ Explosive Performance</h4>
-                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Optimized for speed and scalability</p>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Optimized for speed and scalability
+                        </p>
                     </div>
-                    <div style="padding: 20px; background: var(--glass-bg); border-radius: 15px; border: 1px solid var(--border-color);">
+                    <div
+                        style="padding: 20px; background: var(--glass-bg); border-radius: 15px; border: 1px solid var(--border-color);">
                         <h4 style="color: var(--accent-color); margin-bottom: 10px;">🏭 Enterprise Strength</h4>
                         <p style="color: var(--text-secondary); font-size: 0.9rem;">Built for real-world demands</p>
                     </div>
@@ -952,10 +1135,11 @@
         <!-- Skills Section -->
         <section class="section" id="skills">
             <div style="width: 100%; max-width: 1000px;">
-                <h2 style="text-align: center; margin-bottom: 40px; font-size: 2.5rem; background: linear-gradient(45deg, var(--accent-color), var(--accent-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                <h2
+                    style="text-align: center; margin-bottom: 40px; font-size: 2.5rem; background: linear-gradient(45deg, var(--accent-color), var(--accent-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
                     ⚒️ Volcanic Tech Arsenal
                 </h2>
-                
+
                 <div class="skills-forge">
                     <div class="skill-category">
                         <h4>🔥 Core Languages</h4>
@@ -1047,16 +1231,17 @@
         <!-- Projects Section -->
         <section class="section" id="projects">
             <div style="width: 100%; max-width: 1200px;">
-                <h2 style="text-align: center; margin-bottom: 40px; font-size: 2.5rem; background: linear-gradient(45deg, var(--accent-color), var(--accent-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                <h2
+                    style="text-align: center; margin-bottom: 40px; font-size: 2.5rem; background: linear-gradient(45deg, var(--accent-color), var(--accent-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
                     🚧 Active Forge Projects
                 </h2>
-                
+
                 <div class="projects-grid">
                     <article class="project-card">
                         <div class="project-icon">🏭</div>
                         <h3 class="project-title">Enterprise Magma Core</h3>
                         <p class="project-description">
-                            High-performance enterprise management system built with microservices architecture, 
+                            High-performance enterprise management system built with microservices architecture,
                             featuring real-time data processing and advanced analytics capabilities.
                         </p>
                         <div class="project-tech">
@@ -1076,7 +1261,7 @@
                         <div class="project-icon">📱</div>
                         <h3 class="project-title">Swift Eruption Tracker</h3>
                         <p class="project-description">
-                            iOS financial management application with real-time market data, ML-powered insights, 
+                            iOS financial management application with real-time market data, ML-powered insights,
                             and beautiful SwiftUI interface for modern portfolio tracking.
                         </p>
                         <div class="project-tech">
@@ -1096,7 +1281,7 @@
                         <div class="project-icon">⚒️</div>
                         <h3 class="project-title">Vulcan Game Engine</h3>
                         <p class="project-description">
-                            2D game development framework with advanced physics simulation, particle systems, 
+                            2D game development framework with advanced physics simulation, particle systems,
                             and cross-platform deployment capabilities for indie developers.
                         </p>
                         <div class="project-tech">
@@ -1115,7 +1300,7 @@
                         <div class="project-icon">🌐</div>
                         <h3 class="project-title">Interactive Portfolio</h3>
                         <p class="project-description">
-                            This very website! Built with cutting-edge web technologies, featuring dynamic themes, 
+                            This very website! Built with cutting-edge web technologies, featuring dynamic themes,
                             particle systems, and responsive design optimized for performance.
                         </p>
                         <div class="project-tech">
@@ -1136,51 +1321,69 @@
         <!-- Contact Section -->
         <section class="section" id="contact">
             <div style="width: 100%; max-width: 800px; text-align: center;">
-                <h2 style="margin-bottom: 40px; font-size: 2.5rem; background: linear-gradient(45deg, var(--accent-color), var(--accent-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                <h2
+                    style="margin-bottom: 40px; font-size: 2.5rem; background: linear-gradient(45deg, var(--accent-color), var(--accent-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
                     📡 Contact Interface
                 </h2>
-                
+
                 <div class="terminal-contact">
                     <div class="terminal-header">
                         <div class="terminal-dot red"></div>
                         <div class="terminal-dot yellow"></div>
                         <div class="terminal-dot green"></div>
-                        <span style="margin-left: 10px; color: var(--text-secondary); font-size: 0.8rem;">terminal@khvulcano.dev</span>
+                        <span
+                            style="margin-left: 10px; color: var(--text-secondary); font-size: 0.8rem;">terminal@khvulcano.dev</span>
                     </div>
-                    
+
                     <div class="terminal-content">
                         <div><span class="terminal-prompt">$</span><span class="terminal-command"> whoami</span></div>
                         <div class="terminal-output">Michael Palazzo - Full Stack Software Engineer</div>
                         <br>
-                        <div><span class="terminal-prompt">$</span><span class="terminal-command"> cat contact_info.json</span></div>
+                        <div><span class="terminal-prompt">$</span><span class="terminal-command"> cat
+                                contact_info.json</span></div>
                         <div class="terminal-output">{</div>
-                        <div class="terminal-output">  "email": "<a href="mailto:palazzo.michael.r@gmail.com" style="color: var(--accent-color); text-decoration: none;">palazzo.michael.r@gmail.com</a>",</div>
-                        <div class="terminal-output">  "linkedin": "<a href="https://linkedin.com/in/michael-palazzo" target="_blank" style="color: var(--accent-color); text-decoration: none;">linkedin.com/in/michael-palazzo</a>",</div>
-                        <div class="terminal-output">  "github": "<a href="https://github.com/KHVulcano" target="_blank" style="color: var(--accent-color); text-decoration: none;">github.com/KHVulcano</a>",</div>
-                        <div class="terminal-output">  "status": "available_for_hire",</div>
-                        <div class="terminal-output">  "timezone": "EST",</div>
-                        <div class="terminal-output">  "specialties": ["enterprise_java", "mobile_ios", "cloud_architecture"]</div>
+                        <div class="terminal-output"> "email": "<a href="mailto:palazzo.michael.r@gmail.com"
+                                style="color: var(--accent-color); text-decoration: none;">palazzo.michael.r@gmail.com</a>",
+                        </div>
+                        <div class="terminal-output"> "linkedin": "<a href="https://linkedin.com/in/michael-palazzo"
+                                target="_blank"
+                                style="color: var(--accent-color); text-decoration: none;">linkedin.com/in/michael-palazzo</a>",
+                        </div>
+                        <div class="terminal-output"> "github": "<a href="https://github.com/KHVulcano" target="_blank"
+                                style="color: var(--accent-color); text-decoration: none;">github.com/KHVulcano</a>",
+                        </div>
+                        <div class="terminal-output"> "status": "available_for_hire",</div>
+                        <div class="terminal-output"> "timezone": "EST",</div>
+                        <div class="terminal-output"> "specialties": ["enterprise_java", "mobile_ios",
+                            "cloud_architecture"]</div>
                         <div class="terminal-output">}</div>
                         <br>
-                        <div><span class="terminal-prompt">$</span><span class="terminal-command"> echo "Let's build something amazing together!"</span></div>
+                        <div><span class="terminal-prompt">$</span><span class="terminal-command"> echo "Let's build
+                                something amazing together!"</span></div>
                         <div class="terminal-output">Let's build something amazing together! 🚀</div>
-                        <div><span class="terminal-prompt">$</span><span style="animation: blink 1s infinite;">_</span></div>
+                        <div class="terminal-input-row">
+                            <span class="terminal-prompt">$</span>
+                            <input id="terminal-input" class="terminal-input" autocomplete="off" autofocus />
+                        </div>
                     </div>
                 </div>
-
-                <div style="margin-top: 40px; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
-                    <a href="mailto:palazzo.michael.r@gmail.com" class="status-badge" style="text-decoration: none;">
-                        📧 Send Email
-                    </a>
-                    <a href="https://linkedin.com/in/michael-palazzo" target="_blank" class="status-badge" style="text-decoration: none;">
-                        💼 LinkedIn
-                    </a>
-                    <a href="https://github.com/KHVulcano" target="_blank" class="status-badge" style="text-decoration: none;">
-                        🔗 GitHub
-                    </a>
-                </div>
             </div>
-        </section>
+
+            <div style="margin-top: 40px; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                <a href="mailto:palazzo.michael.r@gmail.com" class="status-badge" style="text-decoration: none;">
+                    📧 Send Email
+                </a>
+                <a href="https://linkedin.com/in/michael-palazzo" target="_blank" class="status-badge"
+                    style="text-decoration: none;">
+                    💼 LinkedIn
+                </a>
+                <a href="https://github.com/KHVulcano" target="_blank" class="status-badge"
+                    style="text-decoration: none;">
+                    🔗 GitHub
+                </a>
+            </div>
+    </div>
+    </section>
     </div>
 
     <!-- Particle System -->
@@ -1231,31 +1434,31 @@
         function setTheme(themeName) {
             try {
                 currentTheme = themeName;
-                
+
                 // Update active button
                 document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
                 event.target.classList.add('active');
-                
+
                 const theme = themes[themeName];
                 const root = document.documentElement;
-                
+
                 // Apply theme colors
-                root.style.setProperty('--accent-color', 
+                root.style.setProperty('--accent-color',
                     `rgb(${theme.accent[0] * 255}, ${theme.accent[1] * 255}, ${theme.accent[2] * 255})`);
-                root.style.setProperty('--accent-secondary', 
+                root.style.setProperty('--accent-secondary',
                     `rgb(${theme.secondary[0] * 255}, ${theme.secondary[1] * 255}, ${theme.secondary[2] * 255})`);
-                root.style.setProperty('--accent-tertiary', 
+                root.style.setProperty('--accent-tertiary',
                     `rgb(${theme.tertiary[0] * 255}, ${theme.tertiary[1] * 255}, ${theme.tertiary[2] * 255})`);
-                
+
                 // Special handling for Vulkano theme
                 if (themeName === 'vulkano') {
                     root.classList.add('vulkano-theme');
                 } else {
                     root.classList.remove('vulkano-theme');
                 }
-                
+
                 updateParticleColors(theme);
-                
+
                 // Store preference
                 localStorage.setItem('preferred-theme', themeName);
             } catch (error) {
@@ -1283,7 +1486,7 @@
             if (!typingElement) return;
 
             const currentText = typingTexts[textIndex];
-            
+
             if (isDeleting) {
                 typingElement.textContent = currentText.substring(0, charIndex - 1);
                 charIndex--;
@@ -1313,7 +1516,7 @@
 
             particleSystem.innerHTML = '';
             const particleCount = window.innerWidth < 768 ? 30 : 60;
-            
+
             for (let i = 0; i < particleCount; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'particle';
@@ -1344,7 +1547,7 @@
             const element = document.getElementById(sectionId);
             if (element) {
                 element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                
+
                 // Update active navigation dot
                 document.querySelectorAll('.nav-dot').forEach(dot => dot.classList.remove('active'));
                 event.target.classList.add('active');
@@ -1358,7 +1561,7 @@
                 const target = parseInt(stat.getAttribute('data-target'));
                 const increment = target / 50;
                 let current = 0;
-                
+
                 const timer = setInterval(() => {
                     current += increment;
                     if (current >= target) {
@@ -1388,7 +1591,7 @@
                     if (entry.isIntersecting) {
                         const sectionId = entry.target.id;
                         document.querySelectorAll('.nav-dot').forEach(dot => dot.classList.remove('active'));
-                        
+
                         const navDots = document.querySelectorAll('.nav-dot');
                         const sections = ['hero', 'about', 'skills', 'projects', 'contact'];
                         const index = sections.indexOf(sectionId);
@@ -1417,12 +1620,12 @@
                 // Set initial theme
                 const savedTheme = localStorage.getItem('preferred-theme') || 'vulkano';
                 document.documentElement.classList.add(`${savedTheme}-theme`);
-                
+
                 // Start animations
                 createParticleSystem();
                 typeText();
                 setupIntersectionObserver();
-                
+
                 // Hide loader
                 setTimeout(() => {
                     const loader = document.getElementById('loader');
@@ -1433,7 +1636,7 @@
                         setTimeout(animateSkillBars, 1000);
                     }
                 }, 2000);
-                
+
                 performanceMetrics.scriptsLoaded = true;
                 console.log('Portfolio initialized successfully');
             } catch (error) {
@@ -1463,6 +1666,69 @@
                 createParticleSystem();
             }, 250);
         });
+        // ...existing code...
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // ...existing code...
+
+            // Terminal input logic
+            const terminalContent = document.querySelector('.terminal-content');
+            const terminalInput = document.getElementById('terminal-input');
+
+            if (terminalInput) {
+                terminalInput.focus();
+
+                terminalInput.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter') {
+                        const command = terminalInput.value.trim();
+                        if (command.length > 0) {
+                            // Echo the command
+                            const cmdDiv = document.createElement('div');
+                            cmdDiv.innerHTML = `<span class="terminal-prompt">$</span><span class="terminal-command"> ${command}</span>`;
+                            terminalContent.appendChild(cmdDiv);
+
+                            // Output (customize responses here)
+                            const outputDiv = document.createElement('div');
+                            outputDiv.className = 'terminal-output';
+                            if (command === 'whoami') {
+                                outputDiv.textContent = 'Michael Palazzo - Full Stack Software Engineer';
+                            } else if (command === 'help') {
+                                outputDiv.textContent = 'Available commands: whoami, help, clear, echo, cat';
+                            } else if (command === 'clear') {
+                                // Clear terminal except input row
+                                Array.from(terminalContent.children).forEach(child => {
+                                    if (!child.classList.contains('terminal-input-row')) child.remove();
+                                });
+                                terminalInput.value = '';
+                                return;
+                            }
+                            else if (command.split(' ')[0] === 'echo') {
+                                outputDiv.textContent = command.substring(5);
+                            } else if (command === 'cat contact_info.json') {
+                                outputDiv.textContent = `{
+"email": "palazzo.michael.r@gmail.com",
+"linkedin": "linkedin.com/in/michael-palazzo",
+"github": "github.com/KHVulcano",
+"status": "available_for_hire",
+"timezone": "EST",
+"specialties": ["enterprise_java", "mobile_ios", "cloud_architecture"]
+}`;
+                            }
+                             else {
+                                outputDiv.textContent = `Command not found: ${command}`;
+                            }
+                            terminalContent.appendChild(outputDiv);
+
+                            // Scroll to bottom
+                            terminalContent.scrollTop = terminalContent.scrollHeight;
+                        }
+                        terminalInput.value = '';
+                    }
+                });
+            }
+        });
+        // ...existing code...
     </script>
 </body>
+
 </html>
