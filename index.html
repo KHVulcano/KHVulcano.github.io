@@ -1556,9 +1556,14 @@
             try {
                 currentTheme = themeName;
 
-                // Update active button
-                document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
-                event.target.classList.add('active');
+                // Update active button based on themeName
+                document.querySelectorAll('.theme-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                    // Check the button's onclick attribute for the theme name
+                    if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(`setTheme('${themeName}'`)) {
+                        btn.classList.add('active');
+                    }
+                });
 
                 const theme = themes[themeName];
                 const root = document.documentElement;
@@ -1740,7 +1745,7 @@
             try {
                 // Set initial theme
                 const savedTheme = localStorage.getItem('preferred-theme') || 'vulkano';
-                document.documentElement.classList.add(`${savedTheme}-theme`);
+                setTheme(savedTheme); // This will set colors AND update the active button
 
                 // Start animations
                 createParticleSystem();
