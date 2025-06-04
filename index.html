@@ -819,6 +819,38 @@
             font-family: 'Fira Code', monospace;
             font-size: 0.9rem;
             line-height: 1.4;
+            max-height: 360px;
+            /* Set a max height for scrolling */
+            overflow-y: auto;
+            /* Enable vertical scroll */
+        }
+
+        .terminal-input-row {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px 12px 20px;
+        }
+
+        .terminal-contact.fullscreen {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            max-width: none;
+            max-height: none;
+            margin: 0;
+            border-radius: 0;
+            z-index: 9999;
+            box-shadow: none;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .terminal-contact.fullscreen .terminal-content {
+            flex: 1 1 auto;
+            max-height: none;
+            height: 100%;
         }
 
         .terminal-prompt {
@@ -1361,12 +1393,14 @@
                         <div><span class="terminal-prompt">$</span><span class="terminal-command"> echo "Let's build
                                 something amazing together!"</span></div>
                         <div class="terminal-output">Let's build something amazing together! 🚀</div>
-                        <div class="terminal-input-row">
-                            <span class="terminal-prompt">$</span>
-                            <input id="terminal-input" class="terminal-input" autocomplete="off" autofocus />
-                        </div>
+
+                    </div>
+                    <div class="terminal-input-row">
+                        <span class="terminal-prompt">$</span>
+                        <input id="terminal-input" class="terminal-input" autocomplete="off" autofocus />
                     </div>
                 </div>
+
             </div>
 
             <div style="margin-top: 40px; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
@@ -1426,6 +1460,13 @@
                 secondary: [1.0, 0.65, 0.0],
                 tertiary: [1.0, 1.0, 0.0],
                 name: 'Vulkano'
+            },
+            super_secret: {
+                primary: [0.2, 0.0, 0.3],      // dark purple background
+                accent: [0.6, 0.2, 1.0],       // vibrant purple accent
+                secondary: [0.4, 0.1, 0.7],    // softer purple
+                tertiary: [0.8, 0.5, 1.0],     // light purple
+                name: 'Secret'
             }
         };
 
@@ -1675,6 +1716,14 @@
             const terminalContent = document.querySelector('.terminal-content');
             const terminalInput = document.getElementById('terminal-input');
 
+                const fullscreenBtn = document.querySelector('.terminal-dot.green');
+    const terminal = document.querySelector('.terminal-contact');
+    if (fullscreenBtn && terminal) {
+        fullscreenBtn.addEventListener('click', () => {
+            terminal.classList.toggle('fullscreen');
+        });
+    }
+
             if (terminalInput) {
                 terminalInput.focus();
 
@@ -1693,7 +1742,20 @@
                             if (command === 'whoami') {
                                 outputDiv.textContent = 'Michael Palazzo - Full Stack Software Engineer';
                             } else if (command === 'help') {
-                                outputDiv.textContent = 'Available commands: whoami, help, clear, echo, cat';
+                                outputDiv.innerHTML = `
+<b>Available commands:</b><br>
+<span style="color:var(--accent-color)">whoami</span> - Show your identity<br>
+<span style="color:var(--accent-color)">help</span> - Show this help message<br>
+<span style="color:var(--accent-color)">clear</span> - Clear the terminal<br>
+<span style="color:var(--accent-color)">echo [text]</span> - Print text<br>
+<span style="color:var(--accent-color)">cat [file]</span> - Show file contents<br>
+<span style="color:var(--accent-color)">themes</span> - List available themes<br>
+<span style="color:var(--accent-color)">settheme [theme]</span> - Change the theme<br>
+<span style="color:var(--accent-color)">pwd</span> - Print working directory<br>
+<span style="color:var(--accent-color)">ls</span> - List files<br>
+<span style="color:var(--accent-color)">date</span> - Show current date and time<br>
+<span style="color:var(--accent-color)">uname</span> - Show system info<br>
+`;
                             } else if (command === 'clear') {
                                 // Clear terminal except input row
                                 Array.from(terminalContent.children).forEach(child => {
@@ -1704,17 +1766,40 @@
                             }
                             else if (command.split(' ')[0] === 'echo') {
                                 outputDiv.textContent = command.substring(5);
-                            } else if (command === 'cat contact_info.json') {
-                                outputDiv.textContent = `{
+                            } else if (command === "themes") {
+                                outputDiv.textContent = "Available themes: " + Object.keys(themes).join(', ');
+                            } else if (command.split(' ')[0] === 'settheme') {
+                                const themeArg = command.split(' ')[1];
+                                if (themeArg && themes[themeArg]) {
+                                    setTheme(themeArg);
+                                    outputDiv.textContent = `Theme set to: ${themes[themeArg].name}`;
+                                } else {
+                                    outputDiv.textContent = 'Theme not found. Use "themes" to list available themes.';
+                                }
+                            }
+                            else if (command === 'pwd') {
+                                outputDiv.textContent = '/home/khvulcano';
+                            } else if (command === 'ls') {
+                                outputDiv.textContent = 'about.txt  projects/  skills/  contact_info.json';
+                            } else if (command === 'date') {
+                                outputDiv.textContent = new Date().toString();
+                            } else if (command === 'uname' || command === 'uname -a') {
+                                outputDiv.textContent = 'Linux forge 6.1.0-portfolio #1 SMP x86_64 GNU/Linux';
+                            } else if (command.startsWith('cat ')) {
+                                const file = command.split(' ')[1];
+                                if (file === 'about.txt') {
+                                    outputDiv.textContent = 'Michael Palazzo - Full Stack Software Engineer\nSpecializing in Java, C#, Swift, and more.';
+                                } else if (file === 'contact_info.json') {
+                                    outputDiv.textContent = `{
 "email": "palazzo.michael.r@gmail.com",
 "linkedin": "linkedin.com/in/michael-palazzo",
-"github": "github.com/KHVulcano",
-"status": "available_for_hire",
-"timezone": "EST",
-"specialties": ["enterprise_java", "mobile_ios", "cloud_architecture"]
+"github": "github.com/KHVulcano"
 }`;
+                                } else {
+                                    outputDiv.textContent = `cat: ${file}: No such file or directory`;
+                                }
                             }
-                             else {
+                            else {
                                 outputDiv.textContent = `Command not found: ${command}`;
                             }
                             terminalContent.appendChild(outputDiv);
