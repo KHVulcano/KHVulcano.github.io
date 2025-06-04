@@ -901,6 +901,12 @@
             opacity: 0.7;
         }
 
+        .terminal-path {
+            color: var(--accent-secondary);
+            margin-right: 6px;
+            font-weight: 500;
+        }
+
         /* ...existing code... */
 
         /* Particle System */
@@ -1396,6 +1402,7 @@
 
                     </div>
                     <div class="terminal-input-row">
+                        <span class="terminal-path" id="terminal-path">/</span>
                         <span class="terminal-prompt">$</span>
                         <input id="terminal-input" class="terminal-input" autocomplete="off" autofocus />
                     </div>
@@ -1426,6 +1433,76 @@
     <script>
         let commandHistory = [];
         let historyIndex = -1;
+
+        const pseudoFS = {
+            '/': {
+                type: 'dir',
+                children: {
+                    'about.txt': { type: 'file', content: 'Michael Palazzo - Full Stack Software Engineer\nSpecializing in Java, C#, Swift, and more.' },
+                    'contact_info.json': {
+                        type: 'file', content: `{
+"email": "palazzo.michael.r@gmail.com",
+"linkedin": "linkedin.com/in/michael-palazzo",
+"github": "github.com/KHVulcano"
+}` },
+                    'projects': {
+                        type: 'dir',
+                        children: {
+                            'README.md': { type: 'file', content: 'Project list coming soon...' }
+                        }
+                    },
+                    'skills': {
+                        type: 'dir',
+                        children: {
+                            'languages.txt': { type: 'file', content: 'Java\nC#\nSwift' }
+                        }
+                    },
+                    'users': {
+                        type: 'dir',
+                        children: {
+                            'vulcano': {
+                                type: 'dir',
+                                children: {
+                                    'todo.txt': {
+                                        type: 'file',
+                                        content: 'TODO:\nEat\nSleep\nCode\nRepeat'
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        };
+        let currentPath = '/';
+
+        // Helper functions
+        function updateTerminalPath() {
+            const pathSpan = document.getElementById('terminal-path');
+            if (pathSpan) pathSpan.textContent = currentPath;
+        }
+        function resolvePath(path) {
+            if (!path) return currentPath;
+            if (path.startsWith('/')) return path;
+            if (currentPath === '/') return '/' + path;
+            return currentPath + '/' + path;
+        }
+        function getNode(path) {
+            const parts = path.split('/').filter(Boolean);
+            let node = pseudoFS['/'];
+            for (const part of parts) {
+                if (!node.children || !node.children[part]) return null;
+                node = node.children[part];
+            }
+            return node;
+        }
+        function getParentPath(path) {
+            if (path === '/') return '/';
+            const parts = path.split('/').filter(Boolean);
+            parts.pop();
+            return '/' + parts.join('/');
+        }
+
 
         // Performance tracking
         const performanceMetrics = {
@@ -1726,6 +1803,7 @@
                     terminal.classList.toggle('fullscreen');
                 });
             }
+            updateTerminalPath();
 
             if (terminalInput) {
                 terminalInput.focus();
@@ -1755,10 +1833,11 @@
 <span style="color:var(--accent-color)">clear</span> - Clear the terminal<br>
 <span style="color:var(--accent-color)">echo [text]</span> - Print text<br>
 <span style="color:var(--accent-color)">cat [file]</span> - Show file contents<br>
+<span style="color:var(--accent-color)">ls [dir]</span> - List files in directory<br>
+<span style="color:var(--accent-color)">cd [dir]</span> - Change directory<br>
+<span style="color:var(--accent-color)">pwd</span> - Print working directory<br>
 <span style="color:var(--accent-color)">themes</span> - List available themes<br>
 <span style="color:var(--accent-color)">settheme [theme]</span> - Change the theme<br>
-<span style="color:var(--accent-color)">pwd</span> - Print working directory<br>
-<span style="color:var(--accent-color)">ls</span> - List files<br>
 <span style="color:var(--accent-color)">date</span> - Show current date and time<br>
 <span style="color:var(--accent-color)">uname</span> - Show system info<br>
 `;
@@ -1784,25 +1863,43 @@
                                 }
                             }
                             else if (command === 'pwd') {
-                                outputDiv.textContent = '/home/khvulcano';
-                            } else if (command === 'ls') {
-                                outputDiv.textContent = 'about.txt  projects/  skills/  contact_info.json';
+                                outputDiv.textContent = currentPath;
+                            } else if (command.startsWith('ls')) {
+                                let path = command.split(' ')[1] || '';
+                                path = resolvePath(path);
+                                const node = getNode(path);
+                                if (node && node.type === 'dir') {
+                                    outputDiv.textContent = Object.keys(node.children).join('  ');
+                                } else if (node && node.type === 'file') {
+                                    outputDiv.textContent = path.split('/').pop();
+                                } else {
+                                    outputDiv.textContent = `ls: cannot access '${path}': No such file or directory`;
+                                }
                             } else if (command === 'date') {
                                 outputDiv.textContent = new Date().toString();
                             } else if (command === 'uname' || command === 'uname -a') {
                                 outputDiv.textContent = 'Linux forge 6.1.0-portfolio #1 SMP x86_64 GNU/Linux';
                             } else if (command.startsWith('cat ')) {
-                                const file = command.split(' ')[1];
-                                if (file === 'about.txt') {
-                                    outputDiv.textContent = 'Michael Palazzo - Full Stack Software Engineer\nSpecializing in Java, C#, Swift, and more.';
-                                } else if (file === 'contact_info.json') {
-                                    outputDiv.textContent = `{
-"email": "palazzo.michael.r@gmail.com",
-"linkedin": "linkedin.com/in/michael-palazzo",
-"github": "github.com/KHVulcano"
-}`;
+                                let path = command.split(' ')[1];
+                                path = resolvePath(path);
+                                const node = getNode(path);
+                                if (node && node.type === 'file') {
+                                    outputDiv.textContent = node.content;
                                 } else {
-                                    outputDiv.textContent = `cat: ${file}: No such file or directory`;
+                                    outputDiv.textContent = `cat: ${path}: No such file`;
+                                }
+                            } else if (command.startsWith('cd')) {
+                                let path = command.split(' ')[1];
+                                if (!path || path === '~') path = '/';
+                                else if (path === '..') path = getParentPath(currentPath);
+                                else path = resolvePath(path);
+                                const node = getNode(path);
+                                if (node && node.type === 'dir') {
+                                    currentPath = path === '' ? '/' : path;
+                                    outputDiv.textContent = '';
+                                    updateTerminalPath();
+                                } else {
+                                    outputDiv.textContent = `cd: ${path}: No such directory`;
                                 }
                             }
                             else {
@@ -1816,31 +1913,31 @@
                         let tempInput = '';
                         terminalInput.value = '';
                     } else if (e.key === 'ArrowUp') {
-        if (commandHistory.length) {
-            if (historyIndex === commandHistory.length) {
-                // Save current input before navigating history
-                tempInput = terminalInput.value;
-            }
-            if (historyIndex > 0) {
-                historyIndex--;
-                terminalInput.value = commandHistory[historyIndex];
-                setTimeout(() => terminalInput.setSelectionRange(terminalInput.value.length, terminalInput.value.length), 0);
-            }
-        }
-        e.preventDefault();
-    } else if (e.key === 'ArrowDown') {
-        if (commandHistory.length) {
-            if (historyIndex < commandHistory.length - 1) {
-                historyIndex++;
-                terminalInput.value = commandHistory[historyIndex];
-            } else if (historyIndex === commandHistory.length - 1) {
-                // Restore the temp input when returning to the latest position
-                historyIndex++;
-                terminalInput.value = tempInput;
-            }
-        }
-        e.preventDefault();
-    }
+                        if (commandHistory.length) {
+                            if (historyIndex === commandHistory.length) {
+                                // Save current input before navigating history
+                                tempInput = terminalInput.value;
+                            }
+                            if (historyIndex > 0) {
+                                historyIndex--;
+                                terminalInput.value = commandHistory[historyIndex];
+                                setTimeout(() => terminalInput.setSelectionRange(terminalInput.value.length, terminalInput.value.length), 0);
+                            }
+                        }
+                        e.preventDefault();
+                    } else if (e.key === 'ArrowDown') {
+                        if (commandHistory.length) {
+                            if (historyIndex < commandHistory.length - 1) {
+                                historyIndex++;
+                                terminalInput.value = commandHistory[historyIndex];
+                            } else if (historyIndex === commandHistory.length - 1) {
+                                // Restore the temp input when returning to the latest position
+                                historyIndex++;
+                                terminalInput.value = tempInput;
+                            }
+                        }
+                        e.preventDefault();
+                    }
                 });
             }
         });
