@@ -1841,10 +1841,14 @@
 <span style="color:var(--accent-color)">ls [dir]</span> - List files in directory<br>
 <span style="color:var(--accent-color)">cd [dir]</span> - Change directory<br>
 <span style="color:var(--accent-color)">pwd</span> - Print working directory<br>
+<span style="color:var(--accent-color)">tree [dir]</span> - Visualize directory structure<br>
 <span style="color:var(--accent-color)">themes</span> - List available themes<br>
 <span style="color:var(--accent-color)">settheme [theme]</span> - Change the theme<br>
 <span style="color:var(--accent-color)">date</span> - Show current date and time<br>
 <span style="color:var(--accent-color)">uname</span> - Show system info<br>
+<span style="color:var(--accent-color)">rm -rf [file/dir]</span> - Recursively remove file or directory
+<span style="color:var(--accent-color)">mkdir [dir]</span> - Create a new directory<br>
+<span style="color:var(--accent-color)">touch [file]</span> - Create a new file<br>
 `;
                             } else if (command === 'clear') {
                                 // Clear terminal except input row
@@ -1854,8 +1858,33 @@
                                 terminalInput.value = '';
                                 return;
                             }
-                            else if (command.split(' ')[0] === 'echo') {
-                                outputDiv.textContent = command.substring(5);
+                            else if (command.startsWith('echo')) {
+                                // Match: echo "text" > filename
+                                const echoMatch = command.match(/^echo\s+"([^"]*)"\s*>\s*(\S+)$/);
+                                if (echoMatch) {
+                                    const text = echoMatch[1];
+                                    let filePath = echoMatch[2];
+                                    filePath = resolvePath(filePath);
+                                    const parts = filePath.split('/').filter(Boolean);
+                                    const fileName = parts.pop();
+                                    const parentPath = '/' + parts.join('/');
+                                    const parentNode = getNode(parentPath);
+
+                                    if (!parentNode || parentNode.type !== 'dir') {
+                                        outputDiv.textContent = `echo: cannot write to '${filePath}': No such directory`;
+                                    } else {
+                                        parentNode.children[fileName] = { type: 'file', content: text };
+                                        outputDiv.textContent = `Updated ${fileName}.`;
+                                    }
+                                } else {
+                                    // Regular echo
+                                    const match = command.match(/^echo\s+"([^"]*)"$/);
+                                    if (match) {
+                                        outputDiv.textContent = match[1];
+                                    } else {
+                                        outputDiv.textContent = command.substring(5).trim();
+                                    }
+                                }
                             } else if (command === "themes") {
                                 outputDiv.textContent = "Available themes: " + Object.keys(themes).join(', ');
                             } else if (command.split(' ')[0] === 'settheme') {
@@ -1905,6 +1934,104 @@
                                     updateTerminalPath();
                                 } else {
                                     outputDiv.textContent = `cd: ${path}: No such directory`;
+                                }
+                            } else if (command.startsWith('tree')) {
+                                let path = command.split(' ')[1] || '';
+                                path = resolvePath(path);
+                                const node = getNode(path);
+
+                                function printTree(node, prefix = '') {
+                                    let output = '';
+                                    if (node.type === 'dir') {
+                                        const entries = Object.entries(node.children);
+                                        entries.forEach(([name, child], idx) => {
+                                            const isLast = idx === entries.length - 1;
+                                            output += `${prefix}${isLast ? '└── ' : '├── '}${name}\n`;
+                                            if (child.type === 'dir') {
+                                                output += printTree(child, prefix + (isLast ? '    ' : '│   '));
+                                            }
+                                        });
+                                    }
+                                    return output;
+                                }
+
+                                if (node && node.type === 'dir') {
+                                    outputDiv.innerHTML = `<pre style="margin:0; text-align:left;">${path === '/' ? '/' : path}\n${printTree(node)}</pre>`;
+                                } else {
+                                    outputDiv.textContent = `tree: cannot access '${path}': No such directory`;
+                                }
+                            } else if (command.startsWith('rm -rf ')) {
+                                let path = command.substring(7).trim();
+                                if (!path) {
+                                    outputDiv.textContent = `rm: missing operand`;
+                                } else {
+                                    path = resolvePath(path);
+                                    if (path === '/' || path === '') {
+                                        // Remove everything from root (reset pseudoFS['/'].children)
+                                        pseudoFS['/'].children = {};
+                                        outputDiv.textContent = '';
+                                        currentPath = '/';
+                                        updateTerminalPath();
+                                    } else {
+                                        // Find parent and key
+                                        const parts = path.split('/').filter(Boolean);
+                                        const key = parts.pop();
+                                        const parentPath = '/' + parts.join('/');
+                                        const parentNode = getNode(parentPath);
+
+                                        if (parentNode && parentNode.children && parentNode.children[key]) {
+                                            delete parentNode.children[key];
+                                            outputDiv.textContent = '';
+                                            // If you are in the deleted directory, move to root
+                                            if (currentPath.startsWith(path)) {
+                                                currentPath = '/';
+                                                updateTerminalPath();
+                                            }
+                                            outputDiv.textContent = `Removed '${path}'`;
+                                        } else {
+                                            outputDiv.textContent = `rm: cannot remove '${path}': No such file or directory`;
+                                        }
+                                    }
+                                }
+                            } else if (command.startsWith('mkdir ')) {
+                                let path = command.substring(6).trim();
+                                if (!path) {
+                                    outputDiv.textContent = `mkdir: missing operand`;
+                                } else {
+                                    path = resolvePath(path);
+                                    const parts = path.split('/').filter(Boolean);
+                                    const dirName = parts.pop();
+                                    const parentPath = '/' + parts.join('/');
+                                    const parentNode = getNode(parentPath);
+
+                                    if (!parentNode || parentNode.type !== 'dir') {
+                                        outputDiv.textContent = `mkdir: cannot create directory '${path}': No such parent directory`;
+                                    } else if (parentNode.children[dirName]) {
+                                        outputDiv.textContent = `mkdir: cannot create directory '${path}': File or directory exists`;
+                                    } else {
+                                        parentNode.children[dirName] = { type: 'dir', children: {} };
+                                        outputDiv.textContent = '';
+                                    }
+                                }
+                            } else if (command.startsWith('touch ')) {
+                                let path = command.substring(6).trim();
+                                if (!path) {
+                                    outputDiv.textContent = `touch: missing file operand`;
+                                } else {
+                                    path = resolvePath(path);
+                                    const parts = path.split('/').filter(Boolean);
+                                    const fileName = parts.pop();
+                                    const parentPath = '/' + parts.join('/');
+                                    const parentNode = getNode(parentPath);
+
+                                    if (!parentNode || parentNode.type !== 'dir') {
+                                        outputDiv.textContent = `touch: cannot create file '${path}': No such parent directory`;
+                                    } else if (parentNode.children[fileName]) {
+                                        outputDiv.textContent = `touch: cannot create file '${path}': File or directory exists`;
+                                    } else {
+                                        parentNode.children[fileName] = { type: 'file', content: '' };
+                                        outputDiv.textContent = '';
+                                    }
                                 }
                             }
                             else {
